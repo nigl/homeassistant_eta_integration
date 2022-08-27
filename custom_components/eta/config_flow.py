@@ -1,10 +1,9 @@
 """Adds config flow for Blueprint."""
 from homeassistant import config_entries
 from homeassistant.core import callback
-from homeassistant.helpers.aiohttp_client import async_create_clientsession
 import voluptuous as vol
 
-from .api import EtaAPI
+from .api import EtaSensorAPIClient
 
 from .const import (
     CONF_HOST,
@@ -15,7 +14,7 @@ from .const import (
 )
 
 
-class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
+class EtaFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Config flow for Eta."""
 
     VERSION = 1
@@ -42,7 +41,7 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                     title=user_input[CONF_HOST], data=user_input
                 )
             else:
-                self._errors["base"] = "url is not working"
+                self._errors["base"] = "url_broken"
 
             return await self._show_config_form(user_input)
 
@@ -74,10 +73,10 @@ class BlueprintFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     async def _test_url(self, host, port):
         """Return true if credentials is valid."""
         try:
-            api = EtaAPI(host, port)
-            root = api.get_xml_data(USER_MENU_SUFFIX)
+            api = EtaSensorAPIClient(host, port)
+            root = api.async_get_data(USER_MENU_SUFFIX)
 
-            return root.attrib["version"] == "1.0"
+            return root["version"] == "1.0"
         except Exception:  # pylint: disable=broad-except
             pass
         return False

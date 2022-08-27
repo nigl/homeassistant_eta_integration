@@ -59,16 +59,16 @@ def setup_platform(
 
     # TODO: read http://192.168.178.75:8080/user/menu and get friendly name in original language
     entities = [
-        EtaSensor(config, hass, "Außentemperatur", "/user/var/120/10601/0/0/12197", TEMP_CELSIUS),
-        EtaSensor(config, hass, "Requested Power", "/user/var/40/10021/0/0/12077", POWER_KILO_WATT),
-        EtaSensor(config, hass, "Requested Temp", "/user/var///40/10021/0/0/12006", TEMP_CELSIUS),
-        EtaSensor(config, hass, "Kesseltemperatur", "/user/var///40/10021/0/11109/0", TEMP_CELSIUS),
-        EtaSensor(config, hass, "Abgastemperatur", "/user/var//40/10021/0/11110/0", TEMP_CELSIUS),
-        EtaSensor(config, hass, "Vorlauftemperatur", "/user/var///120/10101/0/11125/2121", TEMP_CELSIUS),
-        EtaSensor(config, hass, "Silo", "/user/var//40/10201/0/0/12015", MASS_KILOGRAMS),
-        EtaSensor(config, hass, "Pellets Gesamtverbrauch", "/user/var//40/10021/0/0/12016", MASS_KILOGRAMS),
-        EtaSensor(config, hass, "Pellets Gesamtenergie", "/user/var//40/10021/0/0/12016", ENERGY_KILO_WATT_HOUR,
-                  device_class=SensorDeviceClass.ENERGY, state_class=SensorStateClass.TOTAL_INCREASING, factor=4.8)
+        EtaSensor(config, hass, "Außentemperatur", "/user/var/120/10601/0/0/12197", TEMP_CELSIUS)
+        # EtaSensor(config, hass, "Requested Power", "/user/var/40/10021/0/0/12077", POWER_KILO_WATT),
+        # EtaSensor(config, hass, "Requested Temp", "/user/var///40/10021/0/0/12006", TEMP_CELSIUS),
+        # EtaSensor(config, hass, "Kesseltemperatur", "/user/var///40/10021/0/11109/0", TEMP_CELSIUS),
+        # EtaSensor(config, hass, "Abgastemperatur", "/user/var//40/10021/0/11110/0", TEMP_CELSIUS),
+        # EtaSensor(config, hass, "Vorlauftemperatur", "/user/var///120/10101/0/11125/2121", TEMP_CELSIUS),
+        # EtaSensor(config, hass, "Silo", "/user/var//40/10201/0/0/12015", MASS_KILOGRAMS),
+        # EtaSensor(config, hass, "Pellets Gesamtverbrauch", "/user/var//40/10021/0/0/12016", MASS_KILOGRAMS),
+        # EtaSensor(config, hass, "Pellets Gesamtenergie", "/user/var//40/10021/0/0/12016", ENERGY_KILO_WATT_HOUR,
+        #           device_class=SensorDeviceClass.ENERGY, state_class=SensorStateClass.TOTAL_INCREASING, factor=4.8)
 
     ]
 

@@ -1,0 +1,6 @@
+{
+    "name": "ETA",
+    "render_readme": true,
+    "domains": ["sensor", "binary_sensor"],
+    "iot_class": "Local Push"
+}

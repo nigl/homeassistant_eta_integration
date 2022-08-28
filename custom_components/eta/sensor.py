@@ -12,6 +12,7 @@ author hubtub2
 
 from __future__ import annotations
 import requests
+from datetime import timedelta
 import xmltodict
 import logging
 import voluptuous as vol
@@ -27,6 +28,7 @@ from homeassistant.components.sensor import (
 )
 
 from homeassistant.core import HomeAssistant
+from homeassistant import config_entries
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 import homeassistant.helpers.config_validation as cv
@@ -36,6 +38,9 @@ from homeassistant.helpers.entity import generate_entity_id
 # See https://github.com/home-assistant/core/blob/dev/homeassistant/const.py
 from homeassistant.const import (CONF_HOST, CONF_PORT, TEMP_CELSIUS, ENERGY_KILO_WATT_HOUR, POWER_KILO_WATT,
                                  MASS_KILOGRAMS)
+from .const import DOMAIN
+
+SCAN_INTERVAL = timedelta(minutes=1)
 
 # See https://community.home-assistant.io/t/problem-with-scan-interval/139031
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
@@ -45,6 +50,17 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     # vol.Optional(CONF_TYPE): cv.string,
     # vol.Optional(CONF_SCAN_INTERVAL): cv.time_period,
 })
+
+
+async def async_setup_entry(
+        hass: HomeAssistant,
+        config_entry: config_entries.ConfigEntry,
+        async_add_entities,
+):
+    """Setup sensors from a config entry created in the integrations UI."""
+    config = hass.data[DOMAIN][config_entry.entry_id]
+    sensors = [EtaSensor(config, hass, "Außentemperatur", "/user/var/120/10601/0/0/12197", TEMP_CELSIUS)]
+    async_add_entities(sensors, update_before_add=True)
 
 
 def setup_platform(
@@ -72,7 +88,7 @@ def setup_platform(
 
     ]
 
-    add_entities(entities)
+    add_entities(entities, update_before_add=True)
 
 
 class EtaSensor(SensorEntity):

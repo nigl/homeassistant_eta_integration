@@ -1,3 +1,7 @@
+import aiohttp
+import asyncio
+
+import requests
 import xmltodict
 
 
@@ -60,3 +64,16 @@ class EtaAPI:
             except:
                 pass
         return float_dict
+
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+
+        eta_api = EtaAPI(session, "192.168.178.68", "8080")
+        resp = await eta_api.does_endpoint_exists()
+        print(resp)
+        float_dict = await eta_api.get_float_sensors()
+        print(float_dict)
+
+
+asyncio.run(main())

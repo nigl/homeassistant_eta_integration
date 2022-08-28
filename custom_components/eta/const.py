@@ -5,7 +5,8 @@ ISSUE_URL = "https://github.com/nigl/homeassistant_eta_integration/issues"
 CONF_ENABLED = "enabled"
 
 FLOAT_DICT = "FLOAT_DICT"
-CHOOSEN_ENTITIES = "CHOOSEN_ENTITIES"
+CHOOSEN_ENTITIES = "choosen_entities"
+
 
 BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"

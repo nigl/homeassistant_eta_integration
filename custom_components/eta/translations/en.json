@@ -2,11 +2,18 @@
     "config": {
         "step": {
             "user": {
-                "title": "Eta Sensors",
-                "description": "If you need help with the configuration have a look here: https://github.com/custom-components/integration_blueprint",
+                "title": "ETA Step 1",
+                "description": "Type in host and port of your ETA terminal. If you need help with the configuration have a look here: https://github.com/nigl/homeassistant_eta_integration",
                 "data": {
                     "host": "Host",
                     "port": "Port"
+                }
+            },
+            "select_entities": {
+                "title": "ETA Step 2",
+                "description": "Select entities which should be added as entities",
+                "data": {
+                    "choosen_entities": "Possible entities"
                 }
             }
         },

@@ -73,7 +73,7 @@ async def main():
         resp = await eta_api.does_endpoint_exists()
         print(resp)
         float_dict = await eta_api.get_float_sensors()
-        print(float_dict)
+        print(float_dict.keys())
 
 
 asyncio.run(main())

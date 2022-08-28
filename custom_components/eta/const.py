@@ -3,8 +3,6 @@ DOMAIN = "eta"
 ISSUE_URL = "https://github.com/nigl/homeassistant_eta_integration/issues"
 # Configuration and options
 CONF_ENABLED = "enabled"
-CONF_HOST = "host"
-CONF_PORT = "password"
 
 BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"
@@ -15,7 +13,7 @@ USER_MENU_SUFFIX = "/user/menu"
 
 # Defaults
 DEFAULT_NAME = DOMAIN
-
+REQUEST_TIMEOUT = 60
 
 STARTUP_MESSAGE = f"""
 -------------------------------------------------------------------

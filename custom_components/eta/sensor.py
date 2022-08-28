@@ -125,18 +125,8 @@ class EtaSensor(SensorEntity):
         self.host = config.get(CONF_HOST)
         self.port = config.get(CONF_PORT)
 
-        # This must be a unique value within this domain. This is done use serial number of device
-        base = "http://" + self.host + ":" + str(self.port)
-        serial1 = requests.get(base + "/user/var/40/10021/0/0/12489")
-        serial2 = requests.get(base + "/user/var/40/10021/0/0/12490")
-
-        # Parse
-        serial1 = xmltodict.parse(serial1.text)
-        serial1 = serial1['eta']['value']['@strValue']
-        serial2 = xmltodict.parse(serial2.text)
-        serial2 = serial2['eta']['value']['@strValue']
-
-        self._attr_unique_id = "eta" + "_" + serial1 + "." + serial2 + "." + name.replace(" ", "_")
+        # This must be a unique value within this domain. This is done use host
+        self._attr_unique_id = "eta" + "_" + self.host + "." + name.replace(" ", "_")
 
     def update(self) -> None:
         """Fetch new state data for the sensor.

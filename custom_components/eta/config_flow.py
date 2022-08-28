@@ -4,16 +4,19 @@ from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 import voluptuous as vol
 
-from .api import EtaSensorAPIClient
-
+import homeassistant.helpers.config_validation as cv
+from homeassistant.const import (CONF_HOST, CONF_PORT)
 from .const import (
-    CONF_HOST,
-    CONF_PORT,
     DOMAIN,
     USER_MENU_SUFFIX,
-    PLATFORMS
+    PLATFORMS, REQUEST_TIMEOUT
 )
 
+SENSOR_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_PATH): cv.,
+    }
+)
 
 class EtaFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Config flow for Eta."""
@@ -35,11 +38,13 @@ class EtaFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             valid = await self._test_url(
-                user_input[CONF_HOST], user_input[CONF_PORT]
+                self.hass,
+                user_input[CONF_HOST],
+                user_input[CONF_PORT]
             )
             if valid:
                 return self.async_create_entry(
-                    title=user_input[CONF_HOST], data=user_input
+                    title=f"ETA at {user_input[CONF_HOST]}", data=user_input
                 )
             else:
                 self._errors["base"] = "url_broken"
@@ -75,10 +80,11 @@ class EtaFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Return true if host port is valid."""
         session = async_get_clientsession(hass)
         try:
-            resp = session.get(f"http://{host}:{port}/user/menu")
-            text = await resp.text()
-            return len(text) > 0
-        except Exception:  # pylint: disable=broad-except
+            #with async_timeout.timeout(REQUEST_TIMEOUT):
+            #    resp = await session.get(f"http://{host}:{port}")
+            return True#resp.status == 200
+        except Exception as e:  # pylint: disable=broad-except
+            print(e)
             pass
         return False
 

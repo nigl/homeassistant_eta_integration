@@ -60,7 +60,7 @@ class EtaFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Second step in config flow to add a repo to watch."""
         if user_input is not None:
             # add choosen entities to data
-            self.data[CHOOSEN_ENTITIES] = user_input
+            self.data[CHOOSEN_ENTITIES] = user_input[CHOOSEN_ENTITIES]
 
             # User is done, create the config entry.
             return self.async_create_entry(

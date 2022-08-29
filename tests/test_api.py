@@ -38,7 +38,7 @@ class EtaAPI:
         data = await self.get_request("/user/var/" + str(uri))
         text = await data.text()
         data = xmltodict.parse(text)
-        return data["eta"]["value"]["@strValue"]
+        return data["eta"]["value"]["@strValue"], data["eta"]["value"]["@unit"]
 
     async def get_raw_sensor_dict(self):
         data = await self.get_request("/user/menu/")
@@ -58,9 +58,9 @@ class EtaAPI:
         float_dict = {}
         for key in sensor_dict:
             try:
-                raw_value = await self.get_data(sensor_dict[key])
+                raw_value, unit = await self.get_data(sensor_dict[key])
                 value = float(raw_value)
-                float_dict[key] = (sensor_dict[key], value)
+                float_dict[key] = (sensor_dict[key], value, unit)
             except:
                 pass
         return float_dict
@@ -74,6 +74,7 @@ async def main():
         print(resp)
         float_dict = await eta_api.get_float_sensors()
         print(float_dict.keys())
+        print([float_dict[key][2] for key in float_dict])
 
 
 asyncio.run(main())

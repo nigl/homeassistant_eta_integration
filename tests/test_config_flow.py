@@ -1,10 +1,10 @@
 """Test integration_blueprint config flow."""
-from unittest.mock import patch
+from unittest.mock import patch, AsyncMock
 
 import pytest
 from homeassistant import config_entries, data_entry_flow
 from homeassistant.const import CONF_HOST, CONF_PORT
-
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 from custom_components.eta.const import (
     DOMAIN, CHOOSEN_ENTITIES, FLOAT_DICT
 )
@@ -100,30 +100,74 @@ async def test_failed_config_flow(hass, throw_error_test_url_fixture):
     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
     assert result["errors"] == {"base": "url_broken"}
 
-# Our config flow also has an options flow, so we must test it as well.
-# async def test_options_flow(hass):
-#     """Test an options flow."""
-#     # Create a new MockConfigEntry and add to HASS (we're bypassing config
-#     # flow entirely)
-#     entry = MockConfigEntry(domain=DOMAIN, data=MOCK_CONFIG, entry_id="test")
-#     entry.add_to_hass(hass)
-#
-#     # Initialize an options flow
-#     result = await hass.config_entries.options.async_init(entry.entry_id)
-#
-#     # Verify that the first options step is a user form
-#     assert result["type"] == data_entry_flow.RESULT_TYPE_FORM
-#     assert result["step_id"] == "user"
-#
-#     # Enter some fake data into the form
-#     result = await hass.config_entries.options.async_configure(
-#         result["flow_id"],
-#         user_input={platform: platform != SENSOR for platform in PLATFORMS},
-#     )
-#
-#     # Verify that the flow finishes
-#     assert result["type"] == data_entry_flow.RESULT_TYPE_CREATE_ENTRY
-#     assert result["title"] == "test_username"
-#
-#     # Verify that the options were updated
-#     assert entry.options == {BINARY_SENSOR: True, SENSOR: False, SWITCH: True}
+
+async def test_options_flow_remove_sensor(bypass_test_url_fixture, hass):
+    """Test config flow options."""
+    m_instance = AsyncMock()
+    m_instance.getitem = AsyncMock()
+
+
+    config_entry = MockConfigEntry(
+        domain=DOMAIN,
+        unique_id="kodi_recently_added_media",
+        data={
+            CONF_HOST: "1.1.1.1",
+            CONF_PORT: "0",
+            FLOAT_DICT: FLOAT_DICT_CONFIG,
+            CHOOSEN_ENTITIES: ["sensor_old", "sensor_2"]
+        },
+    )
+    config_entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    # show initial form
+    result = await hass.config_entries.options.async_init(config_entry.entry_id)
+    # submit form with options
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"], user_input={CHOOSEN_ENTITIES: []}
+    )
+    assert "create_entry" == result["type"]
+    assert "" == result["title"]
+    assert result["result"] is True
+    assert {CHOOSEN_ENTITIES: [],
+            CONF_HOST: "1.1.1.1",
+            CONF_PORT: "0",
+            FLOAT_DICT: FLOAT_DICT_CONFIG} == result["data"]
+
+
+
+async def test_options_flow_add_repo(bypass_test_url_fixture, hass):
+    """Test config flow options."""
+    m_instance = AsyncMock()
+    m_instance.getitem = AsyncMock()
+
+    config_entry = MockConfigEntry(
+        domain=DOMAIN,
+        unique_id="kodi_recently_added_media",
+        data={
+            CONF_HOST: "1.1.1.1",
+            CONF_PORT: "0",
+            FLOAT_DICT: FLOAT_DICT_CONFIG,
+            CHOOSEN_ENTITIES: ["2", "sensor3"]
+        },
+    )
+    config_entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    # show initial form
+    result = await hass.config_entries.options.async_init(config_entry.entry_id)
+    # submit form with options
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"],
+        user_input={CHOOSEN_ENTITIES: ["sensor3", "sensor1"]}
+    )
+    assert "create_entry" == result["type"]
+    assert "" == result["title"]
+    assert result["result"] is True
+    expected_data = {CHOOSEN_ENTITIES: ["sensor3", "sensor1"],
+     CONF_HOST: "1.1.1.1",
+     CONF_PORT: "0",
+     FLOAT_DICT: FLOAT_DICT_CONFIG}
+    assert expected_data == result["data"]

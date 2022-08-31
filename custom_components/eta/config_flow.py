@@ -140,7 +140,7 @@ class EtaOptionsFlowHandler(config_entries.OptionsFlow):
         """Manage the options."""
         self._errors = {}
 
-        entity_registry = await async_get(self.hass)
+        entity_registry = async_get(self.hass)
         entries = async_entries_for_config_entry(entity_registry, self.config_entry.entry_id)
         entity_map = {e.original_name: e for e in entries}
 

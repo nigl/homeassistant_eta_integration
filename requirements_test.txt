@@ -1,0 +1,4 @@
+pytest-homeassistant-custom-component
+mock
+xmltodict
+aoihttp

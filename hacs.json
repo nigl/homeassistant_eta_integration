@@ -1,6 +1,5 @@
 {
     "name": "ETA",
     "render_readme": true,
-    "iot_class": "Local Push",
     "homeassistant": "2022.4"
 }

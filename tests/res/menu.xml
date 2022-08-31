@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<eta version="1.0" xmlns="http://www.eta.co.at/rest/v1">
+  <menu>
+    <fub uri="/40/10021" name="Kessel">
+      <object uri="/40/10021/0/0/10990" name="Eingänge">
+        <object uri="/40/10021/0/11031/0" name="Wassermangel">
+          <object uri="/40/10021/0/11031/2012" name="Einschalt Verz."/>
+          <object uri="/40/10021/0/11031/2013" name="Ausschalt Verz."/>
+          <object uri="/40/10021/0/11031/2016" name="Eingang"/>
+          <object uri="/40/10021/0/11031/2017" name="Eingang"/>
+        </object>
+        <object uri="/40/10021/0/11032/0" name="Not-Aus Schalter">
+          <object uri="/40/10021/0/11032/2012" name="Einschalt Verz."/>
+          <object uri="/40/10021/0/11032/2013" name="Ausschalt Verz."/>
+          <object uri="/40/10021/0/11032/2016" name="Eingang"/>
+          <object uri="/40/10021/0/11032/2017" name="Eingang"/>
+        </object>
+        <object uri="/40/10021/0/11108/0" name="Restsauerstoff">
+          <object uri="/40/10021/0/11108/2002" name="Zustand"/>
+          <object uri="/40/10021/0/11108/2001" name="Anforderung"/>
+          <object uri="/40/10021/0/11108/2011" name="Sensor Typ"/>
+          <object uri="/40/10021/0/11108/2060" name="Restsauerstoff"/>
+          <object uri="/40/10021/0/11108/2066" name="Signal"/>
+          <object uri="/40/10021/0/11108/2053" name="Verzögerung (Tf)"/>
+          <object uri="/40/10021/0/11108/2058" name="Innenwiderstand"/>
+          <object uri="/40/10021/0/11108/2064" name="Kalibrierwert"/>
+          <object uri="/40/10021/0/11108/2065" name="korrigiertes Signal"/>
+          <object uri="/40/10021/0/11108/2069" name="Heizspannung Ist"/>
+          <object uri="/40/10021/0/11108/2061" name="Heiz Strom"/>
+          <object uri="/40/10021/0/11108/2057" name="Heizleistung"/>
+          <object uri="/40/10021/0/11108/2059" name="O2 nicht korrigiert"/>
+          <object uri="/40/10021/0/11108/2157" name="O2 nicht korr. bei Luft"/>
+          <object uri="/40/10021/0/11108/2400" name="Notbetrieb"/>
+          <object uri="/40/10021/0/0/13944" name="Kalibrierung">
+            <object uri="/40/10021/0/0/12246" name="Kalibrier Intervall"/>
+            <object uri="/40/10021/0/0/12247" name="Letzte Kalibrierung bei"/>
+            <object uri="/40/10021/0/0/12301" name="Extra Kalibrieren"/>
+            <object uri="/40/10021/0/0/13943" name="Kalibrierung abbrechen"/>
+          </object>
+        </object>
+      </object>
+      <object uri="/40/10021/0/0/10991" name="Ausgänge">
+        <object uri="/40/10021/0/11030/0" name="Stokerschnecke">
+          <object uri="/40/10021/0/11030/2001" name="Anforderung"/>
+          <object uri="/40/10021/0/11030/2090" name="Taktrate"/>
+          <object uri="/40/10021/0/11030/2002" name="Zustand"/>
+          <object uri="/40/10021/0/11030/2091" name="Motor Strom">
+            <object uri="/40/10021/0/11030/2097" name="Mindest Strom"/>
+            <object uri="/40/10021/0/11030/2098" name="Nennstrom"/>
+            <object uri="/40/10021/0/11030/2096" name="Maximal Strom"/>
+          </object>
+          <object uri="/40/10021/0/11030/2092" name="Erwärmung"/>
+          <object uri="/40/10021/0/11030/2099" name="Schneckendrehzahl"/>
+          <object uri="/40/10021/0/11030/2102" name="Retourversuche"/>
+        </object>
+        <object uri="/40/10021/0/11048/0" name="Entaschung und Rost">
+          <object uri="/40/10021/0/11048/2001" name="Anforderung"/>
+          <object uri="/40/10021/0/11048/2002" name="Zustand"/>
+          <object uri="/40/10021/0/11048/2083" name="Schalter"/>
+        </object>
+        <object uri="/40/10021/0/11041/0" name="Zündung">
+          <object uri="/40/10021/0/11041/2001" name="Anforderung"/>
+        </object>
+        <object uri="/40/10021/0/11042/0" name="Saugturbine">
+          <object uri="/40/10021/0/11042/2001" name="Anforderung"/>
+        </object>
+        <object uri="/40/10021/0/0/12165" name="Abgasgebläse">
+          <object uri="/40/10021/0/11120/0" name="Abgasgebläse">
+            <object uri="/40/10021/0/11120/2001" name="Anforderung"/>
+            <object uri="/40/10021/0/11120/2002" name="Zustand"/>
+            <object uri="/40/10021/0/11120/2110" name="Soll Drehzahl"/>
+            <object uri="/40/10021/0/11120/2111" name="Ist Drehzahl"/>
+            <object uri="/40/10021/0/11120/2133" name="Drehzahlsteuerung"/>
+            <object uri="/40/10021/0/11120/2400" name="Notbetrieb"/>
+          </object>
+        </object>
+        <object uri="/40/10021/0/11123/0" name="Kesselpumpe">
+          <object uri="/40/10021/0/11123/2001" name="Anforderung"/>
+          <object uri="/40/10021/0/11123/2130" name="Ausgang"/>
+          <object uri="/40/10021/0/11123/2002" name="Zustand"/>
+          <object uri="/40/10021/0/11123/2133" name="Drehzahlsteuerung"/>
+        </object>
+        <object uri="/40/10021/0/11163/0" name="Rücklaufmischer">
+          <object uri="/40/10021/0/11163/2001" name="Anforderung"/>
+          <object uri="/40/10021/0/11163/2120" name="Soll Temperatur"/>
+          <object uri="/40/10021/0/11163/2002" name="Zustand"/>
+          <object uri="/40/10021/0/11163/2121" name="Ist Temperatur"/>
+          <object uri="/40/10021/0/11163/2127" name="Position"/>
+          <object uri="/40/10021/0/11163/2124" name="Laufzeit Mischer"/>
+        </object>
+        <object uri="/40/10021/0/11115/0" name="Luftschieber">
+          <object uri="/40/10021/0/11115/2001" name="Anforderung"/>
+          <object uri="/40/10021/0/11115/2070" name="Soll Stellung"/>
+          <object uri="/40/10021/0/11115/2002" name="Zustand"/>
+          <object uri="/40/10021/0/11115/2071" name="Ist Stellung"/>
+          <object uri="/40/10021/0/11115/2417" name="Schließt nach"/>
+        </object>
+      </object>
+    </fub>
+    <fub uri="/40/10211" name="Lager">
+      <object uri="/40/10211/0/0/13986" name="Typ der Umschalteinheit"/>
+      <object uri="/40/10211/0/0/10990" name="Eingänge">
+        <object uri="/40/10211/0/11133/0" name="Nullpunktschalter">
+          <object uri="/40/10211/0/11133/2012" name="Einschalt Verz."/>
+          <object uri="/40/10211/0/11133/2013" name="Ausschalt Verz."/>
+          <object uri="/40/10211/0/11133/2016" name="Eingang"/>
+          <object uri="/40/10211/0/11133/2017" name="Eingang"/>
+        </object>
+        <object uri="/40/10211/0/0/12266" name="Positionsschalter"/>
+      </object>
+      <object uri="/40/10211/0/0/10991" name="Ausgänge">
+        <object uri="/40/10211/0/11132/0" name="Umschalteinheit">
+          <object uri="/40/10211/0/11132/2001" name="Anforderung"/>
+          <object uri="/40/10211/0/11132/2002" name="Zustand"/>
+          <object uri="/40/10211/0/11132/2083" name="Schalter"/>
+        </object>
+      </object>
+      <object uri="/40/10211/0/0/12010" name="Zählerstände">
+        <object uri="/40/10211/0/0/13794" name="Anzahl Saugvorgänge"/>
+        <object uri="/40/10211/0/0/13795" name="Erfolgreiche Saugvorgänge"/>
+        <object uri="/40/10211/0/0/13790" name="Aktueller Saugvorgang"/>
+        <object uri="/40/10211/0/0/13791" name="Dauer des letzten Saugvorganges"/>
+        <object uri="/40/10211/0/0/13792" name="Anzahl Spülvorgänge"/>
+        <object uri="/40/10211/0/0/13793" name="Erfolgreiche Spülvorgänge"/>
+      </object>
+      <object uri="/40/10211/0/0/19417" name="Austragung">
+        <object uri="/40/10211/0/0/19391" name="Ergänzung"/>
+        <object uri="/40/10211/0/0/12877" name="Umschalteinheit 8-fach"/>
+        <object uri="/40/10211/0/0/12874" name="Sollposition"/>
+        <object uri="/40/10211/0/0/12876" name="Spülposition ?"/>
+        <object uri="/40/10211/0/0/12875" name="Istposition"/>
+        <object uri="/40/10211/0/0/12878" name="Pos. ist Spülposition ?"/>
+        <object uri="/40/10211/0/0/14059" name="Umschalteinheit"/>
+        <object uri="/40/10211/0/0/14060" name="Soll Position"/>
+        <object uri="/40/10211/0/0/12136" name="Umschalteinheit"/>
+        <object uri="/40/10211/0/0/12145" name="Soll Position"/>
+        <object uri="/40/10211/0/0/12147" name="Anzahl Saugvorgänge"/>
+        <object uri="/40/10211/0/0/12148" name="Umschalten ab"/>
+        <object uri="/40/10211/0/0/12261" name="Spüldauer"/>
+      </object>
+      <object uri="/40/10211/0/0/12015" name="Vorrat">
+        <object uri="/40/10211/0/0/12042" name="Vorrat Warngrenze"/>
+      </object>
+      <object uri="/40/10211/0/0/12182" name="Sonstiges">
+        <object uri="/40/10211/0/0/12015" name="Vorrat"/>
+        <object uri="/40/10211/0/0/12262" name="Position 1"/>
+        <object uri="/40/10211/0/0/12263" name="Position 2"/>
+        <object uri="/40/10211/0/0/12264" name="Position 3"/>
+        <object uri="/40/10211/0/0/12539" name="Position 4"/>
+        <object uri="/40/10211/0/0/12879" name="Position 5"/>
+        <object uri="/40/10211/0/0/12880" name="Position 6"/>
+        <object uri="/40/10211/0/0/12881" name="Position 7"/>
+        <object uri="/40/10211/0/0/12882" name="Position 8"/>
+        <object uri="/40/10211/0/0/12883" name="Taste Vor"/>
+        <object uri="/40/10211/0/0/12884" name="Taste Zurück"/>
+      </object>
+    </fub>
+  </menu>
+</eta>

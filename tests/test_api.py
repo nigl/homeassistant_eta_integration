@@ -1,80 +1,116 @@
-import aiohttp
+import pytest
+from unittest.mock import patch
+from custom_components.eta.api import EtaAPI
+from pathlib import Path
 import asyncio
-
-import requests
+import os
 import xmltodict
 
-
-class EtaAPI:
-    def __init__(self, session, host, port):
-        self._session = session
-        self._host = host
-        self._port = port
-
-    def build_uri(self, suffix):
-        return "http://" + self._host + ":" + str(self._port) + suffix
-
-    def evaluate_xml_dict(self, xml_dict, uri_dict, prefix=""):
-        if type(xml_dict) == list:
-            for child in xml_dict:
-                self.evaluate_xml_dict(child, uri_dict, prefix)
-        else:
-            if "object" in xml_dict:
-                child = xml_dict["object"]
-                new_prefix = f"{prefix}_{xml_dict['@name']}"
-                self.evaluate_xml_dict(child, uri_dict, new_prefix)
-            else:
-                uri_dict[f"{prefix}_{xml_dict['@name']}"] = xml_dict["@uri"]
-
-    async def get_request(self, suffix):
-        data = await self._session.get(self.build_uri(suffix))
-        return data
-
-    async def does_endpoint_exists(self):
-        resp = await self.get_request("/user/menu")
-        return resp.status == 200
-
-    async def get_data(self, uri):
-        data = await self.get_request("/user/var/" + str(uri))
-        text = await data.text()
-        data = xmltodict.parse(text)
-        return data["eta"]["value"]["@strValue"], data["eta"]["value"]["@unit"]
-
-    async def get_raw_sensor_dict(self):
-        data = await self.get_request("/user/menu/")
-        text = await data.text()
-        data = xmltodict.parse(text)
-        raw_dict = data["eta"]["menu"]["fub"]
-        return raw_dict
-
-    async def get_sensors_dict(self):
-        raw_dict = await self.get_raw_sensor_dict()
-        uri_dict = {}
-        self.evaluate_xml_dict(raw_dict, uri_dict)
-        return uri_dict
-
-    async def get_float_sensors(self):
-        sensor_dict = await self.get_sensors_dict()
-        float_dict = {}
-        for key in sensor_dict:
-            try:
-                raw_value, unit = await self.get_data(sensor_dict[key])
-                value = float(raw_value)
-                float_dict[key] = (sensor_dict[key], value, unit)
-            except:
-                pass
-        return float_dict
+TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), "res", "menu.xml")
+menu_txt = Path(TESTDATA_FILENAME).read_text()
 
 
-async def main():
-    async with aiohttp.ClientSession() as session:
+class TestResponse:
+    status = 200
 
-        eta_api = EtaAPI(session, "192.168.178.68", "8080")
-        resp = await eta_api.does_endpoint_exists()
-        print(resp)
-        float_dict = await eta_api.get_float_sensors()
-        print(float_dict.keys())
-        print([float_dict[key][2] for key in float_dict])
+    def text(self):
+        value_text = """<?xml version="1.0" encoding="utf-8"?>
+<eta version="1.0" xmlns="http://www.eta.co.at/rest/v1">
+  <value uri="/user/var//40/10211/0/0/12015" strValue="6539" unit="kg" decPlaces="0" scaleFactor="10" advTextOffset="0">65391</value>
+</eta>"""
+        future = asyncio.Future()
+        future.set_result(value_text)
+        return future
 
 
-asyncio.run(main())
+class TestResponseMenu:
+    def text(self):
+        future = asyncio.Future()
+        future.set_result(menu_txt)
+        return future
+
+
+def mock_get_request(*args, **kwargs):
+    future = asyncio.Future()
+    future.set_result(TestResponse())
+    return future
+
+
+def mock_get_request_menu(*args, **kwargs):
+    future = asyncio.Future()
+    future.set_result(TestResponseMenu())
+    return future
+
+
+@pytest.mark.asyncio
+async def test_get_request(monkeypatch):
+    monkeypatch.setattr(EtaAPI, "get_request", mock_get_request)
+    eta = EtaAPI("session", "host", "port")
+
+    resp = await eta.get_request("")
+    assert resp.status == 200
+
+
+@pytest.mark.asyncio
+async def test_does_endpoint_exists(monkeypatch):
+    monkeypatch.setattr(EtaAPI, "get_request", mock_get_request)
+    eta = EtaAPI("session", "host", "port")
+
+    resp = await eta.does_endpoint_exists()
+    assert resp == True
+
+
+@pytest.mark.asyncio
+async def test_get_data(monkeypatch):
+    monkeypatch.setattr(EtaAPI, "get_request", mock_get_request)
+    eta = EtaAPI("session", "host", "port")
+
+    value, unit = await eta.get_data("blub")
+    assert value == "6539"
+    assert unit == "kg"
+
+
+@pytest.mark.asyncio
+async def test_get_raw_sensor_dict(monkeypatch):
+    monkeypatch.setattr(EtaAPI, "get_request", mock_get_request_menu)
+    eta = EtaAPI("session", "host", "port")
+
+    value = await eta.get_raw_sensor_dict()
+    assert type(value) == list  # even if it is called dict it is a list
+
+
+@pytest.mark.asyncio
+async def test_get_menu(monkeypatch):
+    monkeypatch.setattr(EtaAPI, "get_request", mock_get_request_menu)
+    eta = EtaAPI("session", "host", "port")
+
+    value = await eta.get_sensors_dict()
+    assert type(value) == dict
+
+
+def test_get_all_childs():
+    eta = EtaAPI("session", "host", "port")
+    uri_dict = {}
+    eta.evaluate_xml_dict(xmltodict.parse(menu_txt)["eta"]["menu"]["fub"], uri_dict)
+    assert type(uri_dict) == dict
+    assert len(uri_dict) == 97
+
+
+def test_build_uri():
+    eta = EtaAPI("session", "host", "port")
+    assert eta.build_uri("/suffix") == "http://host:port/suffix"
+
+
+@pytest.mark.asyncio
+async def test_get_float_sensors(monkeypatch):
+    def mock_sensors_dict(*args, **kwargs):
+        future = asyncio.Future()
+        future.set_result({"sensor_xy": "test_uri"})
+        return future
+
+    monkeypatch.setattr(EtaAPI, "get_request", mock_get_request)
+    monkeypatch.setattr(EtaAPI, "get_sensors_dict", mock_sensors_dict)
+    eta = EtaAPI("session", "host", "port")
+
+    float_dict = await eta.get_float_sensors()
+    assert float_dict == {"sensor_xy": ("test_uri", 6539.0, "kg")}

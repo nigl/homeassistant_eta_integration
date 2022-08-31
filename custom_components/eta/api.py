@@ -54,9 +54,10 @@ class EtaAPI:
         float_dict = {}
         for key in sensor_dict:
             try:
-                raw_value,unit = await self.get_data(sensor_dict[key])
+                raw_value, unit = await self.get_data(sensor_dict[key])
                 value = float(raw_value)
-                float_dict[key] = (sensor_dict[key], value, unit)
+                cleaned_key = key.lower().replace(" ", "_")
+                float_dict[cleaned_key] = (sensor_dict[key], value, unit)
             except:
                 pass
         return float_dict

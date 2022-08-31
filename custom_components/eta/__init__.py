@@ -4,8 +4,10 @@ import asyncio
 from homeassistant import config_entries, core
 
 from .const import DOMAIN
+import logging
 
 _LOGGER = logging.getLogger(__name__)
+_LOGGER.warning()
 
 
 async def async_setup_entry(

@@ -8,7 +8,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.const import (CONF_HOST, CONF_PORT)
 from homeassistant.helpers.entity_registry import (
     async_entries_for_config_entry,
-    async_get_registry,
+    async_get,
 )
 from .api import EtaAPI
 from .const import (
@@ -131,43 +131,43 @@ class EtaOptionsFlowHandler(config_entries.OptionsFlow):
     def __init__(self, config_entry):
         """Initialize HACS options flow."""
         self.config_entry = config_entry
-        self.options = dict(config_entry.options)
+        self.data = dict(config_entry.data)
 
     async def async_step_init(self, user_input=None):  # pylint: disable=unused-argument
-        """Manage the options."""
-        errors = {}
+        return await self.async_step_user()
 
-        entity_registry = await async_get_registry(self.hass)
-        entries = async_entries_for_config_entry(
-            entity_registry, self.config_entry.entry_id
-        )
-        entity_map = {e.entity_id: e for e in entries}
+    async def async_step_user(self, user_input=None):
+        """Manage the options."""
+        self._errors = {}
+
+        entity_registry = await async_get(self.hass)
+        entries = async_entries_for_config_entry(entity_registry, self.config_entry.entry_id)
+        entity_map = {e.original_name: e for e in entries}
 
         if user_input is not None:
-            updated_entities = deepcopy(self.config_entry.data[CHOOSEN_ENTITIES])
-            # Remove any unchecked repos.
             removed_entities = [
-                entity_id
+                entity_map[entity_id]
                 for entity_id in entity_map.keys()
                 if entity_id not in user_input[CHOOSEN_ENTITIES]
             ]
-            for entity_id in removed_entities:
+            for e in removed_entities:
                 # Unregister from HA
-                entity_registry.async_remove(entity_id)
-                # Remove from our configured repos.
-                entry = entity_map[entity_id]
-                updated_repos = [e for e in updated_entities if e != entry]
+                entity_registry.async_remove(e.entity_id)
+
+            old_chosen_entities = deepcopy(self.config_entry.data[CHOOSEN_ENTITIES])
+            data = {CHOOSEN_ENTITIES: user_input[CHOOSEN_ENTITIES],
+                    FLOAT_DICT: self.data[FLOAT_DICT],
+                    CONF_HOST: self.data[CONF_HOST],
+                    CONF_PORT: self.data[CONF_PORT]}
 
             return self.async_create_entry(
-                title="", data=self.config_entry.data
-            )
-
-        return self._show_config_form_endpoint(self.options[FLOAT_DICT], self.options[CHOOSEN_ENTITIES])
+                title="", data=data)
+        return await self._show_config_form_endpoint(self.data[FLOAT_DICT], [key for key in entity_map.keys()])
 
     async def _show_config_form_endpoint(self, endpoint_dict, current_chosen):  # pylint: disable=unused-argument
         """Show the configuration form to select which endpoints should become entities."""
         return self.async_show_form(
-            step_id="select_entities",
+            step_id="user",
             data_schema=vol.Schema(
                 {
                     vol.Optional(CHOOSEN_ENTITIES, default=current_chosen):
@@ -178,8 +178,7 @@ class EtaOptionsFlowHandler(config_entries.OptionsFlow):
                                 multiple=True
                             ))
                 }
-            ),
-            errors=self._errors,
+            )
         )
 
     async def _update_options(self):

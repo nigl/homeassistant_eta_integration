@@ -66,7 +66,7 @@ async def test_get_data(monkeypatch):
     eta = EtaAPI("session", "host", "port")
 
     value, unit = await eta.get_data("blub")
-    assert value == "6539"
+    assert value == 6539
     assert unit == "kg"
 
 

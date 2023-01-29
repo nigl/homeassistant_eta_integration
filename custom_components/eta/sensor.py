@@ -107,10 +107,20 @@ class EtaSensor(SensorEntity):
 
     @staticmethod
     def determine_device_class(unit):
-        # TODO: Expand this function with more useable units
         unit_dict_eta = {
             "°C": SensorDeviceClass.TEMPERATURE,
             "W": SensorDeviceClass.POWER,
+            "A": SensorDeviceClass.CURRENT,
+            "Hz": SensorDeviceClass.FREQUENCY,
+            "Pa": SensorDeviceClass.PRESSURE,
+            "V": SensorDeviceClass.VOLTAGE,
+            "W/m²": SensorDeviceClass.IRRADIANCE,
+            "bar": SensorDeviceClass.PRESSURE,
+            "kW": SensorDeviceClass.POWER,
+            "kWh": SensorDeviceClass.ENERGY,
+            "kg": SensorDeviceClass.WEIGHT,
+            "mV": SensorDeviceClass.VOLTAGE,
+            "s": SensorDeviceClass.DURATION,
         }
 
         if unit in unit_dict_eta:

@@ -47,6 +47,7 @@ def throw_error_test_url_fixture():
 # we want the config flow validation to succeed during the test.
 
 
+@pytest.mark.asyncio
 async def test_successful_config_flow(hass, bypass_test_url_fixture):
     """Test a successful config flow."""
     # Initialize a config flow
@@ -84,6 +85,7 @@ async def test_successful_config_flow(hass, bypass_test_url_fixture):
 
 
 # In this case, we want to simulate a failure during the config flow.
+@pytest.mark.asyncio
 async def test_failed_config_flow(hass, throw_error_test_url_fixture):
     """Test a failed config flow due to credential validation failure."""
     result = await hass.config_entries.flow.async_init(
@@ -101,6 +103,7 @@ async def test_failed_config_flow(hass, throw_error_test_url_fixture):
     assert result["errors"] == {"base": "url_broken"}
 
 
+@pytest.mark.asyncio
 async def test_options_flow_remove_sensor(bypass_test_url_fixture, hass):
     """Test config flow options."""
     m_instance = AsyncMock()
@@ -137,6 +140,7 @@ async def test_options_flow_remove_sensor(bypass_test_url_fixture, hass):
 
 
 
+@pytest.mark.asyncio
 async def test_options_flow_add_repo(bypass_test_url_fixture, hass):
     """Test config flow options."""
     m_instance = AsyncMock()

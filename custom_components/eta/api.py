@@ -7,6 +7,28 @@ class EtaAPI:
         self._host = host
         self._port = port
 
+        self._float_sensor_units = [
+            "%",
+            "A",
+            "Hz",
+            "Ohm",
+            "Pa",
+            "U/min",
+            "V",
+            "W",
+            "W/m²",
+            "bar",
+            "kW",
+            "kWh",
+            "kg",
+            "l",
+            "l/min",
+            "mV",
+            "m²",
+            "s",
+            "°C",
+        ]
+
     def build_uri(self, suffix):
         return "http://" + self._host + ":" + str(self._port) + suffix
 
@@ -30,11 +52,24 @@ class EtaAPI:
         resp = await self.get_request("/user/menu")
         return resp.status == 200
 
+    async def _parse_data(self, data):
+        unit = data["@unit"]
+        if unit in self._float_sensor_units:
+            scale_factor = int(data["@scaleFactor"])
+            decimal_places = int(data["@decPlaces"])
+            raw_value = float(data["#text"])
+            value = raw_value / scale_factor
+            value = round(value, decimal_places)
+        else:
+            # use default text string representation for values that cannot be parsed properly
+            value = data["@strValue"]
+        return value, unit
+
     async def get_data(self, uri):
         data = await self.get_request("/user/var/" + str(uri))
         text = await data.text()
-        data = xmltodict.parse(text)
-        return data["eta"]["value"]["@strValue"], data["eta"]["value"]["@unit"]
+        data = xmltodict.parse(text)["eta"]["value"]
+        return await self._parse_data(data)
 
     async def get_raw_sensor_dict(self):
         data = await self.get_request("/user/menu/")
@@ -54,8 +89,9 @@ class EtaAPI:
         float_dict = {}
         for key in sensor_dict:
             try:
-                raw_value, unit = await self.get_data(sensor_dict[key])
-                value = float(raw_value)
+                value, unit = await self.get_data(sensor_dict[key])
+                if unit not in self._float_sensor_units:
+                    continue
                 cleaned_key = key.lower().replace(" ", "_")
                 float_dict[cleaned_key] = (sensor_dict[key], value, unit)
             except:

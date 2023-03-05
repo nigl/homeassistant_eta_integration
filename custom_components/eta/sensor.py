@@ -78,10 +78,16 @@ class EtaSensor(SensorEntity):
         """
         _LOGGER.warning("ETA Integration - init sensor")
 
-        self._attr_state_class = state_class
         self._attr_device_class = self.determine_device_class(unit)
+
         if unit == "":
             unit = None
+
+        if self._attr_device_class == SensorDeviceClass.ENERGY:
+            self._attr_state_class = SensorStateClass.TOTAL_INCREASING
+        else:
+            self._attr_state_class = state_class
+
         self._attr_native_unit_of_measurement = unit
         self._attr_native_value = float
         id = name.lower().replace(" ", "_")
@@ -107,10 +113,20 @@ class EtaSensor(SensorEntity):
 
     @staticmethod
     def determine_device_class(unit):
-        # TODO: Expand this function with more useable units
         unit_dict_eta = {
             "°C": SensorDeviceClass.TEMPERATURE,
             "W": SensorDeviceClass.POWER,
+            "A": SensorDeviceClass.CURRENT,
+            "Hz": SensorDeviceClass.FREQUENCY,
+            "Pa": SensorDeviceClass.PRESSURE,
+            "V": SensorDeviceClass.VOLTAGE,
+            "W/m²": SensorDeviceClass.IRRADIANCE,
+            "bar": SensorDeviceClass.PRESSURE,
+            "kW": SensorDeviceClass.POWER,
+            "kWh": SensorDeviceClass.ENERGY,
+            "kg": SensorDeviceClass.WEIGHT,
+            "mV": SensorDeviceClass.VOLTAGE,
+            "s": SensorDeviceClass.DURATION,
         }
 
         if unit in unit_dict_eta:

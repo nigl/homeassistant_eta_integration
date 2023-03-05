@@ -93,7 +93,7 @@ def test_get_all_childs():
     uri_dict = {}
     eta.evaluate_xml_dict(xmltodict.parse(menu_txt)["eta"]["menu"]["fub"], uri_dict)
     assert type(uri_dict) == dict
-    assert len(uri_dict) == 97
+    assert len(uri_dict) == 123
 
 
 def test_build_uri():

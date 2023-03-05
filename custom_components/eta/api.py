@@ -40,6 +40,8 @@ class EtaAPI:
             if "object" in xml_dict:
                 child = xml_dict["object"]
                 new_prefix = f"{prefix}_{xml_dict['@name']}"
+                # add parent to uri_dict and evaluate childs then
+                uri_dict[f"{prefix}_{xml_dict['@name']}"] = xml_dict["@uri"]
                 self.evaluate_xml_dict(child, uri_dict, new_prefix)
             else:
                 uri_dict[f"{prefix}_{xml_dict['@name']}"] = xml_dict["@uri"]

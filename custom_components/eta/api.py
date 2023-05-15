@@ -27,6 +27,7 @@ class EtaAPI:
             "m²",
             "s",
             "°C",
+            "%rH"
         ]
 
     def build_uri(self, suffix):

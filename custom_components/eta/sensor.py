@@ -127,6 +127,7 @@ class EtaSensor(SensorEntity):
             "kg": SensorDeviceClass.WEIGHT,
             "mV": SensorDeviceClass.VOLTAGE,
             "s": SensorDeviceClass.DURATION,
+            "%rH": SensorDeviceClass.HUMIDITY
         }
 
         if unit in unit_dict_eta:

@@ -1,0 +1,28 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ETA Heating Configuration",
+        "description": "Please enter the IP address and port of your ETA heating system (default is 8080).",
+        "data": {
+          "host": "IP Address",
+          "port": "Port"
+        }
+      },
+      "select_entities": {
+        "title": "Select Sensors",
+        "description": "Choose the endpoints you want to monitor as sensors in Home Assistant.",
+        "data": {
+          "choosen_entities": "Available Endpoints"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to ETA heating. Please check IP and port.",
+      "unknown": "An unexpected error occurred."
+    },
+    "abort": {
+      "already_configured": "This ETA heating system is already configured."
+    }
+  }
+}
